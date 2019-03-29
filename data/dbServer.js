@@ -16,8 +16,9 @@ var productSeeder = () => {
   var seeds = [];
   while (seeds.length < 100) {
     seeds.push({
-      currency: faker.finance.currencyCode(),
-      deadline: faker.whatever()
+      name: faker.commerce.productName(),
+      deadline: faker.date.future(1)
+
     });
   }
   return seeds;
@@ -25,15 +26,13 @@ var productSeeder = () => {
 
 var rewardSeeder = () => {
   var seeds = [];
-  while (seeds.length < 100) {
+  while (seeds.length < 500) {
     seeds.push({
-      productId: faker.whatever(),
-      minimum: faker.whatever(),
-      title: faker.whatever(),
-      includes: faker.whatever(),
-      estDelivery: faker.whatever(),
-      shipsTo: faker.whatever(),
-      deadline: faker.whatever()
+      productId: faker.random.number(100),
+      minimum: faker.commerce.price(3, 500, 0),
+      title: faker.commerce.productName(),
+      description: faker.lorem.sentences(),
+      includes: faker.product(3)
     });
   }
   return seeds;
@@ -41,12 +40,10 @@ var rewardSeeder = () => {
 
 var pledgeSeeder = () => {
   var seeds = [];
-  while (seeds.length < 100) {
+  while (seeds.length < 999) {
     seeds.push({
-      productId: faker.whatever(),
-      rewardId: faker.whatever(),
-      shipDest: faker.whatever(),
-      amount: faker.whatever()
+      productId: faker.random.number(100),
+      shipDest: faker.address.country()
     });
   }
   return seeds;
@@ -54,9 +51,9 @@ var pledgeSeeder = () => {
 
 productSeeder().forEach(seed => {
   db.run(
-    'INSERT INTO Products (currency, deadline) VALUES (? ?)', 
+    'INSERT INTO Products (name, deadline) VALUES (? ?)', 
     [
-      seed.currency,
+      seed.name,
       seed.deadline
     ]
   );
@@ -64,27 +61,23 @@ productSeeder().forEach(seed => {
 
 rewardSeeder().forEach(seed => {
   db.run(
-    'INSERT INTO Rewards (productId, minimum, title, includes, estDelivery, shipsTo, deadline) VALUES (? ? ? ? ? ? ?)',
+    'INSERT INTO Rewards (productId, minimum, title, description, includes) VALUES (? ? ? ? ?)',
     [
       seed.productId,
       seed.minimum,
       seed.title,
-      seed.includes,
-      seed.estDelivery,
-      seed.shipsTo,
-      seed.deadline
+      seed.description,
+      seed.includes
     ]
   );
 });
 
 pledgeSeeder().forEach(seed => {
   db.run(
-    'INSERT INTO Pledges (productId, rewardId, shipDest, amount) VALUES (? ? ? ?)',
+    'INSERT INTO Pledges (productId, shipDest) VALUES (? ?)',
     [
       seed.productId, 
-      seed.rewardId, 
-      seed.shipDest, 
-      seed.amount
+      seed.shipDest
     ]
   );
 });
