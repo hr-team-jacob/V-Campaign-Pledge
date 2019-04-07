@@ -40,44 +40,59 @@ var rewardSeeder = () => {
 
 var pledgeSeeder = () => {
   var seeds = [];
-  while (seeds.length < 999) {
+  while (seeds.length < 1000) {
     seeds.push({
       productId: faker.random.number(100),
-      shipDest: faker.address.country()
     });
   }
   return seeds;
 };
 
-productSeeder().forEach(seed => {
+db.serialize(()=>{
+
+  productSeeder().forEach(seed => {
+    db.run(
+      'INSERT INTO Products (name, deadline) VALUES (? ?)', 
+      [
+        seed.name,
+        seed.deadline
+      ]
+    );
+  });
+  
+  rewardSeeder().forEach(seed => {
+    db.run(
+      'INSERT INTO Rewards (productId, minimum, title, description, includes, estDelivery) VALUES (? ? ? ? ?)',
+      [
+        seed.productId,
+        seed.minimum,
+        seed.title,
+        seed.description,
+        seed.includes,
+      ]
+    );
+  });
+  
+  pledgeSeeder().forEach(seed => {
+    db.run(
+      'INSERT INTO Pledges (productId) VALUES (?)',
+      [
+        seed.productId, 
+      ]
+    );
+  });
+
   db.run(
-    'INSERT INTO Products (name, deadline) VALUES (? ?)', 
-    [
-      seed.name,
-      seed.deadline
-    ]
-  );
+    `UPDATE Rewards
+      SET estDelivery = (SELECT deadline FROM Products WHERE id = Rewards.productId)`
+  )
+    .run(
+      `UPDATE Pledges
+      SET rewardId = (SELECT id FROM Rewards WHERE productId = Pledges.productId ORDER BY RANDOM() LIMIT 1)`
+    )
+    .run(
+      `UPDATE Pledges
+      SET amount = (SELECT minimum FROM Rewards WHERE id = Pledges.rewardId)`
+    );
 });
 
-rewardSeeder().forEach(seed => {
-  db.run(
-    'INSERT INTO Rewards (productId, minimum, title, description, includes) VALUES (? ? ? ? ?)',
-    [
-      seed.productId,
-      seed.minimum,
-      seed.title,
-      seed.description,
-      seed.includes
-    ]
-  );
-});
-
-pledgeSeeder().forEach(seed => {
-  db.run(
-    'INSERT INTO Pledges (productId, shipDest) VALUES (? ?)',
-    [
-      seed.productId, 
-      seed.shipDest
-    ]
-  );
-});
