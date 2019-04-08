@@ -12,87 +12,118 @@ var db = new sqlite3.Database(dbPath, err => {
   }
 });
 
-var productSeeder = () => {
-  var seeds = [];
-  while (seeds.length < 100) {
-    seeds.push({
-      name: faker.commerce.productName(),
-      deadline: faker.date.future(1)
+var productSeeds = [];
+var rewardSeeds = [];
+var pledgeSeeds = [];
 
+var productSeeder = () => {
+  while (productSeeds.length < 100) {
+    productSeeds.push({
+      name: faker.commerce.productName(),
+      deadline: faker.date.future(1).toISOString()
     });
   }
-  return seeds;
 };
 
 var rewardSeeder = () => {
-  var seeds = [];
-  while (seeds.length < 500) {
-    seeds.push({
+  while (rewardSeeds.length < 500) {
+    rewardSeeds.push({
       productId: faker.random.number(100),
       minimum: faker.commerce.price(3, 500, 0),
       title: faker.commerce.productName(),
       description: faker.lorem.sentences(),
-      includes: faker.product(3)
+      includes: faker.commerce.product(3)
     });
   }
-  return seeds;
 };
 
 var pledgeSeeder = () => {
-  var seeds = [];
-  while (seeds.length < 1000) {
-    seeds.push({
+  while (pledgeSeeds.length < 1000) {
+    pledgeSeeds.push({
       productId: faker.random.number(100),
     });
   }
-  return seeds;
 };
+
+productSeeder();
+rewardSeeder();
+pledgeSeeder();
+
+productSeeds.forEach(seed => {
+  db.run(
+    'INSERT INTO products (name, deadline) VALUES (?, ?)', 
+    [
+      seed.name,
+      seed.deadline
+    ],
+    (err)=>{
+      if (err) {
+        console.log('Error seeding products table -->', err.message);
+      }
+    }
+  );
+});
+
+rewardSeeds.forEach(seed => {
+  db.run(
+    'INSERT INTO rewards (productId, minimum, title, description, includes) VALUES (?, ?, ?, ?, ?)',
+    [
+      seed.productId,
+      seed.minimum,
+      seed.title,
+      seed.description,
+      seed.includes,
+    ],
+    (err)=>{
+      if (err) {
+        console.log('Error seeding rewards table -->', err.message);
+      }
+    }
+  );
+});
+
+pledgeSeeds.forEach(seed => {
+  db.run(
+    'INSERT INTO pledges (productId) VALUES (?)',
+    [
+      seed.productId, 
+    ],
+    (err)=>{
+      if (err) {
+        console.log('Error seeding pledges table -->', err.message);
+      }
+    }
+  );
+});
+
 
 db.serialize(()=>{
 
-  productSeeder().forEach(seed => {
-    db.run(
-      'INSERT INTO Products (name, deadline) VALUES (? ?)', 
-      [
-        seed.name,
-        seed.deadline
-      ]
-    );
-  });
-  
-  rewardSeeder().forEach(seed => {
-    db.run(
-      'INSERT INTO Rewards (productId, minimum, title, description, includes, estDelivery) VALUES (? ? ? ? ?)',
-      [
-        seed.productId,
-        seed.minimum,
-        seed.title,
-        seed.description,
-        seed.includes,
-      ]
-    );
-  });
-  
-  pledgeSeeder().forEach(seed => {
-    db.run(
-      'INSERT INTO Pledges (productId) VALUES (?)',
-      [
-        seed.productId, 
-      ]
-    );
-  });
-
   db.run(
-    `UPDATE Rewards
-      SET estDelivery = (SELECT deadline FROM Products WHERE id = Rewards.productId)`
+    `UPDATE rewards
+      SET estDelivery = (SELECT deadline FROM products WHERE id = rewards.productId)`,
+    (err)=>{
+      if (err) {
+        console.log('Error updating rewards estDelivery -->', err.message);
+      }
+    }
   )
     .run(
-      `UPDATE Pledges
-      SET rewardId = (SELECT id FROM Rewards WHERE productId = Pledges.productId ORDER BY RANDOM() LIMIT 1)`
+      `UPDATE pledges
+        SET rewardId = (SELECT id FROM rewards WHERE productId = pledges.productId ORDER BY RANDOM() LIMIT 1)`,
+      (err)=>{
+        if (err) {
+          console.log('Error updating pledges rewardId -->', err.message);
+        }
+      }
     )
     .run(
-      `UPDATE Pledges
-      SET amount = (SELECT minimum FROM Rewards WHERE id = Pledges.rewardId)`
+      `UPDATE pledges
+      SET amount = (SELECT minimum FROM rewards WHERE id = pledges.rewardId)`,
+      (err)=>{
+        if (err) {
+          console.log('Error updating pledges amount -->', err.message);
+        }
+      }
     );
 });
-
