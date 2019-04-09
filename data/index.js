@@ -134,7 +134,7 @@ getProduct = (productId) => {
       if (err) { 
         console.log (`Error retrieving product ${productId} from db >> ${err}`);
       } else {
-        console.log (`Success! Retrieved product ${productId} from db >> ${row}`);
+        console.log (`Success! Retrieved product ${productId} from db >> ${JSON.stringify(row)}`);
         return row;
       }
     }
