@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var {getProduct, getRewards, getPledgeCountForProduct, getPledgeSumForProduct, getPledgeCountForReward, addPledge} = require('../data/index.js');
+var {getProduct, getRewards, getPledgeCountForProduct, getPledgeSumForProduct, getPledgeCountForReward, addPledge} = require('../data/helpers.js');
 
 let app = express();
 
@@ -11,13 +11,22 @@ app.use(morgan('dev'));
 
 
 app.get('/:id', (req, res) => {
-  getProduct(req.params.id)
-    .then(results => res.json(results))
+  var id = req.params.id;
+  var productInfo = {};
+  getProduct(id)
+    .then(results => {
+      productInfo.product = results;
+      getRewards(id)
+        .then(results => {
+          productInfo.rewards = results;
+          res.send(productInfo);
+        });
+    })
     .catch(error => {
       console.log(`Could not retrieve product from db --> ${error}`);
     });
 });
-
+  
 let port = 3010;
 
 app.listen(port, function() {
