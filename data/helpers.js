@@ -7,7 +7,7 @@ getProduct = (productId) => {
         console.log (`Error retrieving product ${productId} from db >> ${err}`);
         rej(err);
       } else {
-        console.log (`Success! Retrieved product ${productId} from db >> ${JSON.stringify(row)}`);
+        console.log (`Success! Retrieved product ${productId} from db`);
         res(JSON.stringify(row));
       }
     });
@@ -22,7 +22,7 @@ getRewards = (productId) => {
           console.log (`Error retrieving rewards for product ${productId} from db >> ${err}`);
           rej(err);
         } else {
-          console.log (`Success! Retrieved the following rewards for product ${productId} from db >> ${JSON.stringify(rows)}`);
+          console.log (`Success! Retrieved rewards for product ${productId} from db`);
           res(JSON.stringify(rows));
         }
       }
@@ -36,7 +36,7 @@ getPledgeCountForProduct = (productId) => {
       if (err) { 
         console.log (`Error retrieving pledge count for product ${productId} from db >> ${err}`);
       } else {
-        console.log (`Success! Retrieved pledge count for product ${productId} from db >> ${row}`);
+        console.log (`Success! Retrieved pledge count for product ${productId} from db`);
         return row;
       }
     }
@@ -49,7 +49,7 @@ getPledgeSumForProduct = (productId) => {
       if (err) { 
         console.log (`Error retrieving pledge sum for product ${productId} from db >> ${err}`);
       } else {
-        console.log (`Success! Retrieved pledge sum for product ${productId} from db >> ${row}`);
+        console.log (`Success! Retrieved pledge sum for product ${productId} from db`);
         return row;
       }
     }

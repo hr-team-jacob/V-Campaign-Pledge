@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS products (
   id INTEGER NOT NULL DEFAULT NULL PRIMARY KEY, 
   name VARCHAR(255), 
   deadline TEXT,
+  goal INTEGER,
   backers INTEGER,
   total INTEGER
 );

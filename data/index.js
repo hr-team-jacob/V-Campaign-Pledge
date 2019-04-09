@@ -20,7 +20,8 @@ var productSeeder = () => {
   while (productSeeds.length < 100) {
     productSeeds.push({
       name: faker.commerce.productName(),
-      deadline: faker.date.future(1).toISOString()
+      deadline: faker.date.future(1).toISOString(),
+      goal: faker.commerce.price(10000, 1000000)
     });
   }
 };
@@ -50,10 +51,11 @@ pledgeSeeder();
 
 productSeeds.forEach(seed => {
   db.run(
-    'INSERT INTO products (name, deadline) VALUES (?, ?)', 
+    'INSERT INTO products (name, deadline, goal) VALUES (?, ?, ?)', 
     [
       seed.name,
-      seed.deadline
+      seed.deadline,
+      seed.goal
     ],
     (err)=>{
       if (err) {
