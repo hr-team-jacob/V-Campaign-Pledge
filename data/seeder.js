@@ -20,7 +20,7 @@ var productSeeder = () => {
   while (productSeeds.length < 100) {
     productSeeds.push({
       name: faker.commerce.productName(),
-      deadline: faker.date.future(1).toISOString(),
+      deadline: faker.random.number({min: 2, max: 99}),
       goal: faker.commerce.price(10000, 1000000)
     });
   }
@@ -33,6 +33,7 @@ var rewardSeeder = () => {
       minimum: faker.commerce.price(3, 500, 0),
       title: faker.commerce.productName(),
       description: faker.lorem.sentences(),
+      estDelivery: faker.date.month({}) + ' 2020'
     });
   }
 };
@@ -67,12 +68,13 @@ productSeeds.forEach(seed => {
 
 rewardSeeds.forEach(seed => {
   db.run(
-    'INSERT INTO rewards (productId, minimum, title, description) VALUES (?, ?, ?, ?)',
+    'INSERT INTO rewards (productId, minimum, title, description, estDelivery) VALUES (?, ?, ?, ?, ?)',
     [
       seed.productId,
       seed.minimum,
       seed.title,
       seed.description,
+      seed.estDelivery
     ],
     (err)=>{
       if (err) {
@@ -100,23 +102,14 @@ pledgeSeeds.forEach(seed => {
 db.serialize(()=>{
 
   db.run(
-    `UPDATE rewards
-      SET estDelivery = (SELECT deadline FROM products WHERE id = rewards.productId)`,
+    `UPDATE pledges
+        SET rewardId = (SELECT id FROM rewards WHERE productId = pledges.productId ORDER BY RANDOM() LIMIT 1)`,
     (err)=>{
       if (err) {
-        console.log('Error updating rewards estDelivery -->', err.message);
+        console.log('Error updating pledges rewardId -->', err.message);
       }
     }
   )
-    .run(
-      `UPDATE pledges
-        SET rewardId = (SELECT id FROM rewards WHERE productId = pledges.productId ORDER BY RANDOM() LIMIT 1)`,
-      (err)=>{
-        if (err) {
-          console.log('Error updating pledges rewardId -->', err.message);
-        }
-      }
-    )
     .run(
       `UPDATE products
         SET backers = (SELECT COUNT(amount) FROM pledges WHERE productId = products.id)`,

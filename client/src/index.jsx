@@ -35,9 +35,13 @@ class App extends React.Component {
   render() {
     return (
       <div className='app'>
-        <h2>Hackstarter</h2>
         <div className='summary'>
-          <h3>Dolla Dolla Bills Yall</h3>
+          <h2>${this.state.product.total}</h2>
+          <h6> pledged of ${this.state.product.goal} goal</h6>
+          <h2>{this.state.product.backers}</h2>
+          <h6> backers </h6>
+          <h2>{this.state.product.deadline}</h2>
+          <h6> days to go </h6>
         </div>
         <div className='pledge'>
           <Pledge />
