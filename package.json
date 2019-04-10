@@ -9,7 +9,7 @@
   },
   "scripts": {
     "react-dev": "webpack -d --watch",
-    "start": "nodemon --inspect server/server.js",
+    "start": "nodemon server/index.js",
     "build": "webpack --mode production"
   },
   "dependencies": {
