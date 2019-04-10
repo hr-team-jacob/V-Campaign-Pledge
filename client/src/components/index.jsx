@@ -39,7 +39,7 @@ class App extends React.Component {
         </div>
         <div className='rewards'>
           <rewardView rewards={this.state.rewards} />
-        </div>
+        </div> 
       </div>
     );
   }
