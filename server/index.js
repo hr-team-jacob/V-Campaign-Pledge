@@ -26,7 +26,7 @@ app.get('/product/:id', (req, res) => {
       console.log(`Could not retrieve product from db --> ${error}`);
     });
 });
-  
+
 let port = 3010;
 
 app.listen(port, function() {

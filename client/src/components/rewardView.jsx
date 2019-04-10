@@ -36,7 +36,7 @@ class RewardView extends React.Component {
             onChange={this.handleChange}
           />
         </label>
-        <input type='submit' value='10' />
+        <input type='submit' value='Continue' />
       </form>
     );
   }
