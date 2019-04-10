@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-
+import Pledge from './pledge';
+import RewardView from './rewardView';
 
 class App extends React.Component {
   constructor(props) {
@@ -38,9 +39,12 @@ class App extends React.Component {
         <div className='summary'>
           <h3>Dolla Dolla Bills Yall</h3>
         </div>
+        <div className='pledge'>
+          <Pledge />
+        </div>
         <div className='rewards'>
-          <rewardView rewards={this.state.rewards} />
-        </div> 
+          <RewardView rewards={this.state.rewards} />
+        </div>
       </div>
     );
   }
