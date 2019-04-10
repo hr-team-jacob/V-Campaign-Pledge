@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import Pledge from './components/pledge';
-import RewardView from './components/rewardView';
+import Pledge from './components/pledge.jsx';
+import RewardView from './components/rewardView.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -22,10 +22,10 @@ class App extends React.Component {
   fetchProduct() {
     var path = window.location.pathname;
     axios
-      .get(`/${path}`)
+      .get(`/product${path}`)
       .then(response => {
         console.log('got this response >>>>>>> ', response);
-        this.setState(JSON.parse(response));
+        this.setState(response.data);
       })
       .catch(error => {
         console.log('error getting product info from API', error);

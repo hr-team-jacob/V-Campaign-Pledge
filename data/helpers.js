@@ -8,7 +8,7 @@ getProduct = (productId) => {
         rej(err);
       } else {
         console.log (`Success! Retrieved product ${productId} from db`);
-        res(JSON.stringify(row));
+        res((row));
       }
     });
   });
@@ -23,7 +23,7 @@ getRewards = (productId) => {
           rej(err);
         } else {
           console.log (`Success! Retrieved rewards for product ${productId} from db`);
-          res(JSON.stringify(rows));
+          res((rows));
         }
       }
     );

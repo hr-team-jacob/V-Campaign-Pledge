@@ -1,5 +1,4 @@
 var sqlite3 = require('sqlite3').verbose();
-var faker = require('faker');
 var path = require('path');
 
 var dbPath = path.join(__dirname, 'hackstarter.db');

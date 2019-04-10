@@ -5,12 +5,12 @@ var {getProduct, getRewards, getPledgeCountForProduct, getPledgeSumForProduct, g
 
 let app = express();
 
-app.use(express.static(__dirname + '/../client/dist'));
+app.use('/:id', express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 
-app.get('/:id', (req, res) => {
+app.get('/product/:id', (req, res) => {
   var id = req.params.id;
   var productInfo = {};
   getProduct(id)
