@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import Pledge from './pledge';
-import RewardView from './rewardView';
+import Pledge from './components/pledge';
+import RewardView from './components/rewardView';
 
 class App extends React.Component {
   constructor(props) {
