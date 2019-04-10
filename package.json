@@ -8,7 +8,9 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "start": "nodemon server/index.js"
+    "react-dev": "webpack -d --watch",
+    "start": "nodemon --inspect server/server.js",
+    "build": "webpack --mode production"
   },
   "dependencies": {
     "babel-core": "^6.26.3",
