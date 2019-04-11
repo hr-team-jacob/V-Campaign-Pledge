@@ -42,10 +42,11 @@ class App extends React.Component {
           <h2>{this.state.product.deadline}</h2>
           <h6> days to go </h6>
         </div>
-        <div className='pledge'>
+        <div>
+          <h3> Support </h3>
           <Pledge fetchProduct={this.fetchProduct} />
         </div>
-        <div className='rewards'>
+        <div>
           <RewardView rewards={this.state.rewards} fetchProduct={this.fetchProduct}/>
         </div>
       </div>

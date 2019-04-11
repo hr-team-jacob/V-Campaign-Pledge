@@ -28,17 +28,17 @@ class Pledge extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Make a pledge without a reward
+      <div>
+        <form onSubmit={this.handleSubmit} className='pledge'>
+          <h4>Make a pledge without a reward</h4>
           <input
             type='text'
             value={this.state.inputVal}
             onChange={this.handleChange}
           />
-        </label>
-        <input type='submit' value='Continue' />
-      </form>
+          <input type='submit' value='Continue' />
+        </form>
+      </div>
     );
   }
 }

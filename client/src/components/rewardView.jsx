@@ -55,10 +55,10 @@ class RewardView extends React.Component {
 
   render() {
     return (
-      <div className='reward'>
+      <div>
         {this.props.rewards.map((reward, index) => {
           return (
-            <div key={index}>
+            <div key={index} className='reward'>
               <div className='rewardMin'>
                 <h2>Pledge ${reward.minimum} or more</h2>
               </div>

@@ -4,3 +4,21 @@
   flex-direction: column;
   width: 300px;
 }
+
+.summary {
+  border-top: 3px solid #037362;
+  margin: 15px 15px 40px 15px;
+}
+
+.pledge {
+  border: .1px solid lightgrey;
+  padding: 15px;
+  margin: 15px;
+}
+
+.reward {
+  border: .1px solid lightgrey;
+  padding: 15px;
+  margin: 15px;
+}
+
