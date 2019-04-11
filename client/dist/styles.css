@@ -1,0 +1,6 @@
+.pledge-container {
+  font-family: 'Karla', 'Helvetica Neue', sans-serif;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
