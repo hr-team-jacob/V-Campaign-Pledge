@@ -23,7 +23,6 @@ class RewardView extends React.Component {
     axios
       .get(`/countries${path}`)
       .then(response => {
-
         this.setState({
           countries: response.data
         });
@@ -50,8 +49,6 @@ class RewardView extends React.Component {
       .catch(error => console.log('Error adding pledge -->', error));
     event.preventDefault();
   }
-
-
 
   render() {
     return (

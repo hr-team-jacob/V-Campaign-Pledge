@@ -47,7 +47,10 @@ class App extends React.Component {
           <Pledge fetchProduct={this.fetchProduct} />
         </div>
         <div>
-          <RewardView rewards={this.state.rewards} fetchProduct={this.fetchProduct}/>
+          <RewardView
+            rewards={this.state.rewards}
+            fetchProduct={this.fetchProduct}
+          />
         </div>
       </div>
     );

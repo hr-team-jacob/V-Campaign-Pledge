@@ -205,7 +205,7 @@ var productSeeder = () => {
   while (productSeeds.length < 100) {
     productSeeds.push({
       name: faker.commerce.productName(),
-      deadline: faker.random.number({min: 2, max: 99}),
+      deadline: faker.random.number({ min: 2, max: 99 }),
       goal: faker.commerce.price(10000, 1000000)
     });
   }
@@ -226,7 +226,7 @@ var rewardSeeder = () => {
 var pledgeSeeder = () => {
   while (pledgeSeeds.length < 1000) {
     pledgeSeeds.push({
-      productId: faker.random.number(100),
+      productId: faker.random.number(100)
     });
   }
 };
@@ -237,13 +237,9 @@ pledgeSeeder();
 
 productSeeds.forEach(seed => {
   db.run(
-    'INSERT INTO products (name, deadline, goal) VALUES (?, ?, ?)', 
-    [
-      seed.name,
-      seed.deadline,
-      seed.goal
-    ],
-    (err)=>{
+    'INSERT INTO products (name, deadline, goal) VALUES (?, ?, ?)',
+    [seed.name, seed.deadline, seed.goal],
+    err => {
       if (err) {
         console.log('Error seeding products table -->', err.message);
       }
@@ -261,7 +257,7 @@ rewardSeeds.forEach(seed => {
       seed.description,
       seed.estDelivery
     ],
-    (err)=>{
+    err => {
       if (err) {
         console.log('Error seeding rewards table -->', err.message);
       }
@@ -269,14 +265,11 @@ rewardSeeds.forEach(seed => {
   );
 });
 
-
 pledgeSeeds.forEach(seed => {
   db.run(
     'INSERT INTO pledges (productId) VALUES (?)',
-    [
-      seed.productId, 
-    ],
-    (err)=>{
+    [seed.productId],
+    err => {
       if (err) {
         console.log('Error seeding pledges table -->', err.message);
       }
@@ -285,26 +278,18 @@ pledgeSeeds.forEach(seed => {
 });
 
 countrySeeds.forEach(seed => {
-  db.run(
-    'INSERT INTO countries (country) VALUES (?)',
-    [
-      seed, 
-    ],
-    (err)=>{
-      if (err) {
-        console.log('Error seeding pledges table -->', err.message);
-      }
+  db.run('INSERT INTO countries (country) VALUES (?)', [seed], err => {
+    if (err) {
+      console.log('Error seeding pledges table -->', err.message);
     }
-  );
+  });
 });
 
-
-db.serialize(()=>{
-
+db.serialize(() => {
   db.run(
     `UPDATE pledges
         SET rewardId = (SELECT id FROM rewards WHERE productId = pledges.productId ORDER BY RANDOM() LIMIT 1)`,
-    (err)=>{
+    err => {
       if (err) {
         console.log('Error updating pledges rewardId -->', err.message);
       }
@@ -313,7 +298,7 @@ db.serialize(()=>{
     .run(
       `UPDATE products
         SET backers = (SELECT COUNT(amount) FROM pledges WHERE productId = products.id)`,
-      (err)=>{
+      err => {
         if (err) {
           console.log('Error updating backers for product -->', err.message);
         }
@@ -322,7 +307,7 @@ db.serialize(()=>{
     .run(
       `UPDATE rewards
         SET backers = (SELECT COUNT(amount) FROM pledges WHERE rewardId = rewards.id)`,
-      (err)=>{
+      err => {
         if (err) {
           console.log('Error updating backers for product -->', err.message);
         }
@@ -331,7 +316,7 @@ db.serialize(()=>{
     .run(
       `UPDATE pledges
       SET amount = (SELECT minimum FROM rewards WHERE id = pledges.rewardId)`,
-      (err)=>{
+      err => {
         if (err) {
           console.log('Error updating pledges amount -->', err.message);
         }
@@ -340,7 +325,7 @@ db.serialize(()=>{
     .run(
       `UPDATE products
         SET total = (SELECT SUM(amount) FROM pledges WHERE productId = products.id)`,
-      (err)=>{
+      err => {
         if (err) {
           console.log('Error updating backers for product -->', err.message);
         }
@@ -349,11 +334,11 @@ db.serialize(()=>{
 });
 
 var pledgeUpdate = () => {
-  db.serialize(()=>{
+  db.serialize(() => {
     db.run(
       `UPDATE products
         SET backers = (SELECT COUNT(amount) FROM pledges WHERE productId = products.id)`,
-      (err)=>{
+      err => {
         if (err) {
           console.log('Error updating backers for product -->', err.message);
         }
@@ -362,7 +347,7 @@ var pledgeUpdate = () => {
       .run(
         `UPDATE products
         SET total = (SELECT SUM(amount) FROM pledges WHERE productId = products.id)`,
-        (err)=>{
+        err => {
           if (err) {
             console.log('Error updating backers for product -->', err.message);
           }
@@ -371,7 +356,7 @@ var pledgeUpdate = () => {
       .run(
         `UPDATE rewards
         SET backers = (SELECT COUNT(amount) FROM pledges WHERE rewardId = rewards.id)`,
-        (err)=>{
+        err => {
           if (err) {
             console.log('Error updating backers for product -->', err.message);
           }
