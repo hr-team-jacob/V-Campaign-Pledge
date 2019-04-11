@@ -39,6 +39,21 @@ app.post('/product/:id', (req, res) => {
     });
 });
 
+app.post('/reward/:id/', (req, res) => {
+  var id = req.params.id;
+  var amount = req.body.amount;
+  var reward = req.body.reward;
+  console.log('reqbody looks like ----> ', req.body);
+  addPledge(id, amount, reward)
+    .then(results => {
+      pledgeUpdate();
+      res.send(results);
+    })
+    .catch(error => {
+      console.log(`Could not add product to db --> ${error}`);
+    });
+});
+
 app.get('/countries/:id', (req, res) => {
   getCountries()
     .then(results => {

@@ -39,17 +39,19 @@ class RewardView extends React.Component {
 
   handleSubmit(event) {
     var path = window.location.pathname;
+    var reward = event.target.value;
     axios
-      .post(`/${path}`, {
+      .post(`/reward${path}`, {
         amount: this.state.inputVal,
-        reward: (reward.id = null)
+        reward: event.target.dataset.id
       })
-      .then(response => {
-        console.log('Added pledge -->', response.data);
-      })
+      .then(() => this.props.fetchProduct())
+      .then(response => console.log('Added pledge -->'))
       .catch(error => console.log('Error adding pledge -->', error));
     event.preventDefault();
   }
+
+
 
   render() {
     return (
@@ -87,7 +89,7 @@ class RewardView extends React.Component {
                   );
                 })}
               </select>
-              <form onSubmit={this.handleSubmit}>
+              <form onSubmit={this.handleSubmit} data-id={reward.id}>
                 <label>
                   <h6>Pledge amount</h6>
                   <div>$</div>

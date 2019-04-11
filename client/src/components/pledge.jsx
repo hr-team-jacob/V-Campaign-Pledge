@@ -21,7 +21,7 @@ class Pledge extends React.Component {
     axios
       .post(`/product${path}`, { amount: this.state.inputVal })
       .then(() => this.props.fetchProduct())
-      .then(response => console.log('Added pledge -->', response.data))
+      .then(response => console.log('Added pledge -->'))
       .catch(error => console.log('Error adding pledge -->', error));
     event.preventDefault();
   }
