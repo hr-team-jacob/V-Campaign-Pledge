@@ -24,7 +24,6 @@ class App extends React.Component {
     axios
       .get(`/product${path}`)
       .then(response => {
-        console.log('got this response >>>>>>> ', response);
         this.setState(response.data);
       })
       .catch(error => {

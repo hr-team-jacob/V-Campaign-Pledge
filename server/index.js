@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var {getProduct, getRewards, getPledgeCountForProduct, getPledgeSumForProduct, getPledgeCountForReward, addPledge} = require('../data/helpers.js');
+var {getProduct, getRewards, getCountries, getPledgeCountForProduct, getPledgeSumForProduct, getPledgeCountForReward, addPledge} = require('../data/helpers.js');
 
 let app = express();
 
@@ -24,6 +24,16 @@ app.get('/product/:id', (req, res) => {
     })
     .catch(error => {
       console.log(`Could not retrieve product from db --> ${error}`);
+    });
+});
+
+app.get('/countries/:id', (req, res) => {
+  getCountries()
+    .then(results => {
+      res.send(results);
+    })
+    .catch(error => {
+      console.log(`Could not retrieve countries from db --> ${error}`);
     });
 });
 
