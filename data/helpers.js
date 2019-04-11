@@ -37,15 +37,18 @@ getRewards = productId => {
 
 getCountries = () => {
   return new Promise((res, rej) => {
-    db.all('SELECT country FROM countries ORDER BY country asc', (err, rows) => {
-      if (err) {
-        console.log(`Error retrieving countries from db >> ${err}`);
-        rej(err);
-      } else {
-        console.log('Success! Retrieved countries from db');
-        res(rows);
+    db.all(
+      'SELECT country FROM countries ORDER BY country asc',
+      (err, rows) => {
+        if (err) {
+          console.log(`Error retrieving countries from db >> ${err}`);
+          rej(err);
+        } else {
+          console.log('Success! Retrieved countries from db');
+          res(rows);
+        }
       }
-    });
+    );
   });
 };
 
@@ -103,14 +106,66 @@ getPledgeCountForReward = rewardId => {
   );
 };
 
-addPledge = (productId, rewardId = null, amount) => {
-  db.run(
-    'INSERT INTO pledges (productId, rewardId, amount) VALUES (?, ?, ?)',
-    [productId, rewardId, amount],
-    err => {
-      console.log(`Error adding pledge of $${amount} to DB >> ${err}`);
-    }
-  );
+addPledge = (productId, amount, rewardId = null) => {
+  return new Promise((res, rej) => {
+    db.run(
+      'INSERT INTO pledges (productId, amount, rewardId) VALUES (?, ?, ?)',
+      [productId, amount, rewardId],
+      (err, row) => {
+        if (err) {
+          console.log(`Error adding pledge of $${amount} to DB >> ${err}`);
+          rej(err);
+        } else {
+          console.log('Success! Added pledge to db');
+          res(row);
+        }
+      }
+    );
+  });
+};
+
+pledgeUpdate = () => {
+  return new Promise((res, rej) => {
+    db.serialize(() => {
+      db.run(
+        `UPDATE products
+          SET backers = (SELECT COUNT(amount) FROM pledges WHERE productId = products.id)`,
+        err => {
+          if (err) {
+            console.log('Error updating backers for product -->', err.message);
+            rej(err);
+          }
+        }
+      )
+        .run(
+          `UPDATE products
+          SET total = (SELECT SUM(amount) FROM pledges WHERE productId = products.id)`,
+          err => {
+            if (err) {
+              console.log(
+                'Error updating backers for product -->',
+                err.message
+              );
+              rej(err);
+            }
+          }
+        )
+        .run(
+          `UPDATE rewards
+          SET backers = (SELECT COUNT(amount) FROM pledges WHERE rewardId = rewards.id)`,
+          err => {
+            if (err) {
+              console.log(
+                'Error updating backers for product -->',
+                err.message
+              );
+              rej(err);
+            }
+          }
+        );
+    });
+    res();
+  });
 };
 
 module.exports = {
@@ -120,5 +175,6 @@ module.exports = {
   getPledgeCountForProduct,
   getPledgeSumForProduct,
   getPledgeCountForReward,
-  addPledge
+  addPledge,
+  pledgeUpdate
 };

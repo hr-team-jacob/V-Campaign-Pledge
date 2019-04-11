@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var {getProduct, getRewards, getCountries, getPledgeCountForProduct, getPledgeSumForProduct, getPledgeCountForReward, addPledge} = require('../data/helpers.js');
+var {getProduct, getRewards, getCountries, getPledgeCountForProduct, getPledgeSumForProduct, getPledgeCountForReward, addPledge, pledgeUpdate} = require('../data/helpers.js');
 
 let app = express();
 
@@ -24,6 +24,18 @@ app.get('/product/:id', (req, res) => {
     })
     .catch(error => {
       console.log(`Could not retrieve product from db --> ${error}`);
+    });
+});
+
+app.post('/product/:id', (req, res) => {
+  var id = req.params.id;
+  addPledge(id, req.body.amount)
+    .then(results => {
+      pledgeUpdate();
+      res.send(results);
+    })
+    .catch(error => {
+      console.log(`Could not add product to db --> ${error}`);
     });
 });
 

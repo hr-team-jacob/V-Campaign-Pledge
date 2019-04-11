@@ -44,7 +44,9 @@ class RewardView extends React.Component {
         amount: this.state.inputVal,
         reward: (reward.id = null)
       })
-      .then(response => console.log('Added pledge -->', response.data))
+      .then(response => {
+        console.log('Added pledge -->', response.data);
+      })
       .catch(error => console.log('Error adding pledge -->', error));
     event.preventDefault();
   }

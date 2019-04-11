@@ -347,3 +347,35 @@ db.serialize(()=>{
       }
     );
 });
+
+var pledgeUpdate = () => {
+  db.serialize(()=>{
+    db.run(
+      `UPDATE products
+        SET backers = (SELECT COUNT(amount) FROM pledges WHERE productId = products.id)`,
+      (err)=>{
+        if (err) {
+          console.log('Error updating backers for product -->', err.message);
+        }
+      }
+    )
+      .run(
+        `UPDATE products
+        SET total = (SELECT SUM(amount) FROM pledges WHERE productId = products.id)`,
+        (err)=>{
+          if (err) {
+            console.log('Error updating backers for product -->', err.message);
+          }
+        }
+      )
+      .run(
+        `UPDATE rewards
+        SET backers = (SELECT COUNT(amount) FROM pledges WHERE rewardId = rewards.id)`,
+        (err)=>{
+          if (err) {
+            console.log('Error updating backers for product -->', err.message);
+          }
+        }
+      );
+  });
+};
