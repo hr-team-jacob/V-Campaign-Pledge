@@ -1,7 +1,16 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var {getProduct, getRewards, getPledgeCountForProduct, getPledgeSumForProduct, getPledgeCountForReward, addPledge} = require('../data/helpers.js');
+var {
+  getProduct,
+  getRewards,
+  getCountries,
+  getPledgeCountForProduct,
+  getPledgeSumForProduct,
+  getPledgeCountForReward,
+  addPledge,
+  pledgeUpdate
+} = require('../data/helpers.js');
 
 let app = express();
 
@@ -9,21 +18,56 @@ app.use('/:id', express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-
 app.get('/product/:id', (req, res) => {
   var id = req.params.id;
   var productInfo = {};
   getProduct(id)
     .then(results => {
       productInfo.product = results;
-      getRewards(id)
-        .then(results => {
-          productInfo.rewards = results;
-          res.send(productInfo);
-        });
+      getRewards(id).then(results => {
+        productInfo.rewards = results;
+        res.send(productInfo);
+      });
     })
     .catch(error => {
       console.log(`Could not retrieve product from db --> ${error}`);
+    });
+});
+
+app.post('/product/:id', (req, res) => {
+  var id = req.params.id;
+  addPledge(id, req.body.amount)
+    .then(results => {
+      pledgeUpdate();
+      res.send(results);
+    })
+    .catch(error => {
+      console.log(`Could not add product to db --> ${error}`);
+    });
+});
+
+app.post('/reward/:id/', (req, res) => {
+  var id = req.params.id;
+  var amount = req.body.amount;
+  var reward = req.body.reward;
+  console.log('reqbody looks like ----> ', req.body);
+  addPledge(id, amount, reward)
+    .then(results => {
+      pledgeUpdate();
+      res.send(results);
+    })
+    .catch(error => {
+      console.log(`Could not add product to db --> ${error}`);
+    });
+});
+
+app.get('/countries/:id', (req, res) => {
+  getCountries()
+    .then(results => {
+      res.send(results);
+    })
+    .catch(error => {
+      console.log(`Could not retrieve countries from db --> ${error}`);
     });
 });
 

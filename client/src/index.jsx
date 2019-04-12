@@ -24,7 +24,6 @@ class App extends React.Component {
     axios
       .get(`/product${path}`)
       .then(response => {
-        console.log('got this response >>>>>>> ', response);
         this.setState(response.data);
       })
       .catch(error => {
@@ -35,19 +34,27 @@ class App extends React.Component {
   render() {
     return (
       <div className='app'>
-        <h2>Hackstarter</h2>
         <div className='summary'>
-          <h3>Dolla Dolla Bills Yall</h3>
+          <h2>${this.state.product.total}</h2>
+          <h6> pledged of ${this.state.product.goal} goal</h6>
+          <h2>{this.state.product.backers}</h2>
+          <h6> backers </h6>
+          <h2>{this.state.product.deadline}</h2>
+          <h6> days to go </h6>
         </div>
-        <div className='pledge'>
-          <Pledge />
+        <div>
+          <h3> Support </h3>
+          <Pledge fetchProduct={this.fetchProduct} />
         </div>
-        <div className='rewards'>
-          <RewardView rewards={this.state.rewards} />
+        <div>
+          <RewardView
+            rewards={this.state.rewards}
+            fetchProduct={this.fetchProduct}
+          />
         </div>
       </div>
     );
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('pledgeApp'));

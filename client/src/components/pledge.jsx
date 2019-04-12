@@ -19,25 +19,26 @@ class Pledge extends React.Component {
   handleSubmit(event) {
     var path = window.location.pathname;
     axios
-      .post(`/${path}`, { amount: this.state.inputVal })
-      .then(response => console.log('Added pledge -->', response.data))
+      .post(`/product${path}`, { amount: this.state.inputVal })
+      .then(() => this.props.fetchProduct())
+      .then(response => console.log('Added pledge -->'))
       .catch(error => console.log('Error adding pledge -->', error));
     event.preventDefault();
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Make a pledge without a reward
+      <div>
+        <form onSubmit={this.handleSubmit} className='pledge'>
+          <h4>Make a pledge without a reward</h4>
           <input
             type='text'
             value={this.state.inputVal}
             onChange={this.handleChange}
           />
-        </label>
-        <input type='submit' value='Continue' />
-      </form>
+          <input type='submit' value='Continue' />
+        </form>
+      </div>
     );
   }
 }

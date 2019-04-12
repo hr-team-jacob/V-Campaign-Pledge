@@ -26,3 +26,8 @@ CREATE TABLE IF NOT EXISTS pledges (
   FOREIGN KEY (productId) REFERENCES Products (id),
   FOREIGN KEY (rewardId) REFERENCES Rewards (id)
 );
+
+CREATE TABLE IF NOT EXISTS countries (
+  id INTEGER NOT NULL PRIMARY KEY,
+  country VARCHAR(50)
+);
