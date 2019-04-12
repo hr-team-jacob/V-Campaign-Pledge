@@ -16,10 +16,10 @@ var {
 
 let app = express();
 
+app.use(cors());
 app.use('/:id', express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
-app.use(cors());
 
 app.get('/product/:id', (req, res) => {
   var id = req.params.id;
