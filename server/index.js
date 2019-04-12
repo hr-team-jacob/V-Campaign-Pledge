@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
+var cors = require('cors');
+
 var {
   getProduct,
   getRewards,
@@ -17,6 +19,7 @@ let app = express();
 app.use('/:id', express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
+app.use(cors());
 
 app.get('/product/:id', (req, res) => {
   var id = req.params.id;
