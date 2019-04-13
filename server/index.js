@@ -16,7 +16,7 @@ var {
 
 let app = express();
 
-app.use(express.static(__dirname + '/../client/dist'));
+app.use('/:id', express.static(__dirname + '/../client/dist'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
