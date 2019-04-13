@@ -16,7 +16,7 @@ var {
 
 let app = express();
 
-app.use(cors());
+app.use(cors({origin: '*'}));
 app.use('/:id', express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
