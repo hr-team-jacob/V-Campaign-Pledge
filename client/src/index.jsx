@@ -22,7 +22,7 @@ class App extends React.Component {
   fetchProduct() {
     var path = window.location.pathname;
     axios
-      .get(`/product${path}`)
+      .get(`http://ec2-3-88-85-118.compute-1.amazonaws.com/product${path}`)
       .then(response => {
         this.setState(response.data);
       })

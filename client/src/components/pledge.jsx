@@ -19,7 +19,7 @@ class Pledge extends React.Component {
   handleSubmit(event) {
     var path = window.location.pathname;
     axios
-      .post(`/product${path}`, { amount: this.state.inputVal })
+      .post(`http://ec2-3-88-85-118.compute-1.amazonaws.com/product${path}`, { amount: this.state.inputVal })
       .then(() => this.props.fetchProduct())
       .then(response => console.log('Added pledge -->'))
       .catch(error => console.log('Error adding pledge -->', error));
