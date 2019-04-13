@@ -57,4 +57,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('pledgeApp'));
+ReactDOM.render(<App />, document.getElementById('pledge1'));
