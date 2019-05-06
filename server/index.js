@@ -15,11 +15,11 @@ var {
 } = require('../data/helpers.js');
 
 let app = express();
-
-app.use('/:id', express.static(__dirname + '/../client/dist'));
+app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.json());
-app.use(morgan('dev'));
+app.use('/:id', express.static(__dirname + '/../client/dist'));
+
 
 app.get('/product/:id', (req, res) => {
   var id = req.params.id;
