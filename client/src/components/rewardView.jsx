@@ -21,7 +21,7 @@ class RewardView extends React.Component {
   fetchCountries() {
     var path = window.location.pathname;
     axios
-      .get(`http://ec2-3-88-85-118.compute-1.amazonaws.com/countries${path}`)
+      .get(`http://ec2-54-243-6-104.compute-1.amazonaws.com/countries${path}`)
       .then(response => {
         this.setState({
           countries: response.data
@@ -40,7 +40,7 @@ class RewardView extends React.Component {
     var path = window.location.pathname;
     var reward = event.target.value;
     axios
-      .post(`http://ec2-3-88-85-118.compute-1.amazonaws.com/reward${path}`, {
+      .post(`http://ec2-54-243-6-104.compute-1.amazonaws.com/reward${path}`, {
         amount: this.state.inputVal,
         reward: event.target.dataset.id
       })
